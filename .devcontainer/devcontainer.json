@@ -1,9 +1,17 @@
 {
   "name": "node-firecracker",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-24-bookworm",
+  "image": "node:24-bookworm",
   "runArgs": ["--device=/dev/kvm"],
-  "postCreateCommand": "sudo chmod 666 /dev/kvm 2>/dev/null || true; npm install",
+  "postCreateCommand": "chmod 666 /dev/kvm 2>/dev/null || true; npm install",
   "customizations": {
+    "jetbrains": {
+      "settings": {
+        "com.intellij:app:EditorSettings.is_ensure_newline_at_eof": true,
+        "Git4Idea:app:Git-Application-Settings.use_credential_helper": true,
+        "com.intellij:app:HttpConfigurable.use_proxy_pac": true,
+        "com.intellij:app:Vcs-Log-App-Settings.show_changes_from_parents": true
+      }
+    },
     "vscode": {
       "extensions": ["dbaeumer.vscode-eslint", "vitest.explorer"]
     }
