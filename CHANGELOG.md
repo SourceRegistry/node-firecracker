@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/SourceRegistry/node-firecracker/compare/v1.1.0...v1.2.0) (2026-06-19)
+
+
+### Bug Fixes
+
+* use plain node:24-bookworm devcontainer image ([d39e6dc](https://github.com/SourceRegistry/node-firecracker/commit/d39e6dcf650b8c07db1a3220446c28f954147a7c))
+
+
+### Features
+
+* add devcontainer and fixture-fetch script for real VM testing ([3c114ef](https://github.com/SourceRegistry/node-firecracker/commit/3c114ef86e10e8089210ebb4c3ffa68b99d3f74f))
+
 # [1.1.0](https://github.com/SourceRegistry/node-firecracker/compare/v1.0.0...v1.1.0) (2026-06-19)
 
 
