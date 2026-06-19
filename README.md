@@ -158,6 +158,13 @@ the container environment automatically, so the real integration test just runs:
 npx vitest run src/integration.real.test.ts
 ```
 
+The guest's serial console runs inside a tmux session and is fully interactive — attach to it
+from a terminal in the container to log in and poke around:
+
+```bash
+docker exec -it <container> tmux attach -t firecracker   # Ctrl-b d to detach without killing the VM
+```
+
 Outside the devcontainer, fetch the fixtures and run the test manually instead:
 
 ```bash
