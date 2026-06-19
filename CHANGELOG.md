@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/SourceRegistry/node-firecracker/compare/v1.3.1...v1.3.2) (2026-06-19)
+
+
+### Bug Fixes
+
+* point examples/simple at devcontainer fixture paths via env vars ([b5a4c5f](https://github.com/SourceRegistry/node-firecracker/commit/b5a4c5f924d96f8ee12d072a77818f4dcb26f62d))
+
 ## [1.3.1](https://github.com/SourceRegistry/node-firecracker/compare/v1.3.0...v1.3.1) (2026-06-19)
 
 
