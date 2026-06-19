@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/SourceRegistry/node-firecracker/compare/v1.3.0...v1.3.1) (2026-06-19)
+
+
+### Bug Fixes
+
+* invoke devcontainer scripts via bash, not the exec bit ([c7a00f3](https://github.com/SourceRegistry/node-firecracker/commit/c7a00f33d1a21b49e8faa5034ee32fdaf6002485))
+
 # [1.3.0](https://github.com/SourceRegistry/node-firecracker/compare/v1.2.0...v1.3.0) (2026-06-19)
 
 
