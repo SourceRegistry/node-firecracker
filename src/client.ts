@@ -34,9 +34,9 @@ export interface FirecrackerClientOptions {
   timeoutMs?: number;
 }
 
-type Requester = <T>(method: string, path: string, body?: unknown) => Promise<T>;
+export type Requester = <T>(method: string, path: string, body?: unknown) => Promise<T>;
 
-class BalloonStatsResource {
+export class BalloonStatsResource {
   constructor(private readonly request: Requester) {}
 
   get(): Promise<BalloonStats> {
@@ -48,7 +48,7 @@ class BalloonStatsResource {
   }
 }
 
-class BalloonResource {
+export class BalloonResource {
   readonly stats: BalloonStatsResource;
 
   constructor(private readonly request: Requester) {
@@ -68,7 +68,7 @@ class BalloonResource {
   }
 }
 
-class BootSourceResource {
+export class BootSourceResource {
   constructor(private readonly request: Requester) {}
 
   set(bootSource: BootSource): Promise<void> {
@@ -76,7 +76,7 @@ class BootSourceResource {
   }
 }
 
-class DriveResource {
+export class DriveResource {
   constructor(
     private readonly request: Requester,
     private readonly driveId: string,
@@ -91,7 +91,7 @@ class DriveResource {
   }
 }
 
-class LoggerResource {
+export class LoggerResource {
   constructor(private readonly request: Requester) {}
 
   set(logger: Logger): Promise<void> {
@@ -99,7 +99,7 @@ class LoggerResource {
   }
 }
 
-class MachineConfigResource {
+export class MachineConfigResource {
   constructor(private readonly request: Requester) {}
 
   get(): Promise<MachineConfiguration> {
@@ -115,7 +115,7 @@ class MachineConfigResource {
   }
 }
 
-class MetricsResource {
+export class MetricsResource {
   constructor(private readonly request: Requester) {}
 
   set(metrics: Metrics): Promise<void> {
@@ -123,7 +123,7 @@ class MetricsResource {
   }
 }
 
-class MmdsConfigResource {
+export class MmdsConfigResource {
   constructor(private readonly request: Requester) {}
 
   set(config: MmdsConfig): Promise<void> {
@@ -131,7 +131,7 @@ class MmdsConfigResource {
   }
 }
 
-class MmdsResource {
+export class MmdsResource {
   readonly config: MmdsConfigResource;
 
   constructor(private readonly request: Requester) {
@@ -151,7 +151,7 @@ class MmdsResource {
   }
 }
 
-class NetworkInterfaceResource {
+export class NetworkInterfaceResource {
   constructor(
     private readonly request: Requester,
     private readonly ifaceId: string,
@@ -166,7 +166,7 @@ class NetworkInterfaceResource {
   }
 }
 
-class SnapshotResource {
+export class SnapshotResource {
   constructor(private readonly request: Requester) {}
 
   create(params: SnapshotCreateParams): Promise<void> {
@@ -178,7 +178,7 @@ class SnapshotResource {
   }
 }
 
-class VmResource {
+export class VmResource {
   constructor(private readonly request: Requester) {}
 
   update(state: VmState): Promise<void> {
@@ -186,7 +186,7 @@ class VmResource {
   }
 }
 
-class VmConfigResource {
+export class VmConfigResource {
   constructor(private readonly request: Requester) {}
 
   get(): Promise<FullVmConfiguration> {
@@ -194,7 +194,7 @@ class VmConfigResource {
   }
 }
 
-class VsockResource {
+export class VsockResource {
   constructor(private readonly request: Requester) {}
 
   set(vsock: Vsock): Promise<void> {
