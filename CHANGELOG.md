@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/SourceRegistry/node-firecracker/compare/v1.3.2...v1.4.0) (2026-06-19)
+
+
+### Features
+
+* make the devcontainer's guest console interactive ([b9e0e5e](https://github.com/SourceRegistry/node-firecracker/commit/b9e0e5eb54710345a482c2577967c2c0aad9ebe0))
+
 ## [1.3.2](https://github.com/SourceRegistry/node-firecracker/compare/v1.3.1...v1.3.2) (2026-06-19)
 
 
