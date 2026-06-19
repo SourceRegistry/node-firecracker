@@ -1,3 +1,16 @@
+# [1.3.0](https://github.com/SourceRegistry/node-firecracker/compare/v1.2.0...v1.3.0) (2026-06-19)
+
+
+### Bug Fixes
+
+* bootstrap firecracker via ENTRYPOINT, not postStartCommand ([96b0b02](https://github.com/SourceRegistry/node-firecracker/commit/96b0b02fea4df7a6b6ac6aa5493547c39fccbe8a))
+* build a custom image for the devcontainer ENTRYPOINT ([3a42fad](https://github.com/SourceRegistry/node-firecracker/commit/3a42fad70bb28f6ba2ef2d1e71b01f2ca620da3f))
+
+
+### Features
+
+* auto-provision firecracker + default socket in devcontainer ([9406b04](https://github.com/SourceRegistry/node-firecracker/commit/9406b04a4de91aebc2d52904e8b622d118f01831))
+
 # [1.2.0](https://github.com/SourceRegistry/node-firecracker/compare/v1.1.0...v1.2.0) (2026-06-19)
 
 
