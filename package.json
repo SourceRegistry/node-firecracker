@@ -30,7 +30,8 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "docs:build": "typedoc src/index.ts --out generated/docs --name \"node-firecracker\" --excludePrivate --excludeProtected",
-    "examples/simple": "tsx examples/simple.ts"
+    "examples/simple": "tsx examples/simple.ts",
+    "publish:unscoped": "node scripts/publish-unscoped.mjs"
   },
   "repository": {
     "type": "git",
@@ -60,6 +61,7 @@
     "@sourceregistry/semantic-release-jsr": "^1.1.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/npm": "^13.1.3",
     "@semantic-release/release-notes-generator": "^14.1.0",
@@ -83,6 +85,12 @@
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
       "@semantic-release/npm",
+      [
+        "@semantic-release/exec",
+        {
+          "publishCmd": "npm run publish:unscoped"
+        }
+      ],
       [
         "@sourceregistry/semantic-release-jsr",
         {
