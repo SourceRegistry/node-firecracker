@@ -142,8 +142,23 @@ skipped by default — it needs a Linux host with `/dev/kvm` access plus a real 
 binary, kernel image, and rootfs (none of which are checked into this repo).
 
 Open this repo in the provided devcontainer (`.devcontainer/devcontainer.json` — "Reopen in
-Container" in VSCode), which passes `/dev/kvm` through automatically. Then fetch the fixtures
-and run the test:
+Container" in VSCode), which passes `/dev/kvm` through, downloads the firecracker binary/kernel/
+rootfs on first create, and keeps a long-lived firecracker process bound to
+`/run/firecracker.socket` running on every container start — so a real VM is already reachable
+as soon as the container is up:
+
+```bash
+curl --unix-socket /run/firecracker.socket http://localhost/
+```
+
+`FIRECRACKER_BIN`, `FIRECRACKER_KERNEL`, `FIRECRACKER_ROOTFS` and `FIRECRACKER_SOCKET` are set in
+the container environment automatically, so the real integration test just runs:
+
+```bash
+npx vitest run src/integration.real.test.ts
+```
+
+Outside the devcontainer, fetch the fixtures and run the test manually instead:
 
 ```bash
 ./scripts/fetch-firecracker-fixtures.sh   # downloads firecracker + vmlinux + rootfs.ext4, prints the command below

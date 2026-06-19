@@ -2,7 +2,14 @@
   "name": "node-firecracker",
   "image": "node:24-bookworm",
   "runArgs": ["--device=/dev/kvm"],
-  "postCreateCommand": "chmod 666 /dev/kvm 2>/dev/null || true; npm install",
+  "containerEnv": {
+    "FIRECRACKER_BIN": "/opt/firecracker-fixtures/release-v1.16.0-x86_64/firecracker-v1.16.0-x86_64",
+    "FIRECRACKER_KERNEL": "/opt/firecracker-fixtures/vmlinux",
+    "FIRECRACKER_ROOTFS": "/opt/firecracker-fixtures/rootfs.ext4",
+    "FIRECRACKER_SOCKET": "/run/firecracker.socket"
+  },
+  "postCreateCommand": "chmod 666 /dev/kvm 2>/dev/null || true; npm install && ./scripts/fetch-firecracker-fixtures.sh /opt/firecracker-fixtures",
+  "postStartCommand": "bash scripts/devcontainer-start-firecracker.sh",
   "customizations": {
     "jetbrains": {
       "settings": {
