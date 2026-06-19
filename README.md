@@ -139,16 +139,26 @@ npm run docs:build  # generate TypeDoc
 
 `src/integration.real.test.ts` boots an actual Firecracker microVM through the client and is
 skipped by default — it needs a Linux host with `/dev/kvm` access plus a real firecracker
-binary, kernel image, and rootfs (none of which are checked into this repo). Get them from the
-[Firecracker quickstart guide](https://github.com/firecracker-microvm/firecracker/blob/main/docs/getting-started.md),
-then run:
+binary, kernel image, and rootfs (none of which are checked into this repo).
+
+Open this repo in the provided devcontainer (`.devcontainer/devcontainer.json` — "Reopen in
+Container" in VSCode), which passes `/dev/kvm` through automatically. Then fetch the fixtures
+and run the test:
 
 ```bash
+./scripts/fetch-firecracker-fixtures.sh   # downloads firecracker + vmlinux + rootfs.ext4, prints the command below
+
 FIRECRACKER_BIN=/path/to/firecracker \
 FIRECRACKER_KERNEL=/path/to/vmlinux \
 FIRECRACKER_ROOTFS=/path/to/rootfs.ext4 \
 npx vitest run src/integration.real.test.ts
 ```
+
+Without a devcontainer, this needs a native Linux environment (WSL2 works) — running on a
+filesystem shared with Windows (`/mnt/c/...`) breaks native `node_modules` binaries when you
+switch between `npm install` on Windows and on Linux. Either keep two separate `npm install`s
+(one per OS, reinstalled when you switch), or clone the repo into the Linux-native filesystem
+(e.g. `~/node-firecracker`) and work from there instead.
 
 ---
 
