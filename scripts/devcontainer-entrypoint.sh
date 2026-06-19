@@ -20,7 +20,7 @@ if REPO_ROOT="$(find_repo_root)"; then
   chmod 666 /dev/kvm 2>/dev/null || true
 
   if [ ! -x "${FIRECRACKER_BIN:-}" ]; then
-    "$REPO_ROOT/scripts/fetch-firecracker-fixtures.sh" /opt/firecracker-fixtures || true
+    bash "$REPO_ROOT/scripts/fetch-firecracker-fixtures.sh" /opt/firecracker-fixtures || true
   fi
 
   bash "$REPO_ROOT/scripts/devcontainer-start-firecracker.sh" || true

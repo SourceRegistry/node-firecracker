@@ -11,7 +11,7 @@
     "FIRECRACKER_ROOTFS": "/opt/firecracker-fixtures/rootfs.ext4",
     "FIRECRACKER_SOCKET": "/run/firecracker.socket"
   },
-  "postCreateCommand": "chmod 666 /dev/kvm 2>/dev/null || true; npm install && ./scripts/fetch-firecracker-fixtures.sh /opt/firecracker-fixtures",
+  "postCreateCommand": "chmod 666 /dev/kvm 2>/dev/null || true; npm install && bash scripts/fetch-firecracker-fixtures.sh /opt/firecracker-fixtures",
   "postStartCommand": "bash scripts/devcontainer-start-firecracker.sh",
   "customizations": {
     "jetbrains": {
