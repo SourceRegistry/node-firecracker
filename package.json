@@ -23,9 +23,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "tsc && vite build && npm run build:jsr-package",
-    "build:jsr-types": "node scripts/build-jsr-types.mjs",
-    "build:jsr-package": "npm run build:jsr-types && node scripts/build-jsr-package.mjs",
+    "build": "tsc && vite build",
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
@@ -58,7 +56,6 @@
     "access": "public"
   },
   "devDependencies": {
-    "@sourceregistry/semantic-release-jsr": "^1.1.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/exec": "^7.1.0",
@@ -68,7 +65,6 @@
     "@types/node": "^25.5.2",
     "@vitest/coverage-v8": "^4.1.2",
     "@vitest/ui": "^4.0.16",
-    "jsr": "^0.13.0",
     "tsx": "^4.21.0",
     "typedoc": "^0.28.18",
     "typescript": "^6.0.2",
@@ -92,20 +88,11 @@
         }
       ],
       [
-        "@sourceregistry/semantic-release-jsr",
-        {
-          "pkgRoot": "generated/jsr-publish",
-          "configFile": "jsr.json",
-          "allowSlowTypes": true
-        }
-      ],
-      [
         "@semantic-release/git",
         {
           "assets": [
             "package.json",
             "package-lock.json",
-            "jsr.json",
             "CHANGELOG.md"
           ],
           "message": "node-firecracker(release): ${nextRelease.version}\n\n${nextRelease.notes}"
