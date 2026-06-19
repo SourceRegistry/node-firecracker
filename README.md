@@ -135,6 +135,21 @@ npm run build
 npm run docs:build  # generate TypeDoc
 ```
 
+### Real VM testing
+
+`src/integration.real.test.ts` boots an actual Firecracker microVM through the client and is
+skipped by default — it needs a Linux host with `/dev/kvm` access plus a real firecracker
+binary, kernel image, and rootfs (none of which are checked into this repo). Get them from the
+[Firecracker quickstart guide](https://github.com/firecracker-microvm/firecracker/blob/main/docs/getting-started.md),
+then run:
+
+```bash
+FIRECRACKER_BIN=/path/to/firecracker \
+FIRECRACKER_KERNEL=/path/to/vmlinux \
+FIRECRACKER_ROOTFS=/path/to/rootfs.ext4 \
+npx vitest run src/integration.real.test.ts
+```
+
 ---
 
 ## License
