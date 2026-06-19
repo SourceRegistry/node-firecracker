@@ -1,0 +1,108 @@
+{
+  "name": "@sourceregistry/node-firecracker",
+  "version": "0.0.0",
+  "description": "Typed Node.js client for the Firecracker microVM REST API.",
+  "type": "module",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
+    }
+  },
+  "files": [
+    "dist",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc && vite build && npm run build:jsr-package",
+    "build:jsr-types": "node scripts/build-jsr-types.mjs",
+    "build:jsr-package": "npm run build:jsr-types && node scripts/build-jsr-package.mjs",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "docs:build": "typedoc src/index.ts --out generated/docs --name \"node-firecracker\" --excludePrivate --excludeProtected",
+    "examples/simple": "tsx examples/simple.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SourceRegistry/node-firecracker.git"
+  },
+  "keywords": [
+    "firecracker",
+    "microvm",
+    "vm",
+    "virtualization",
+    "kvm",
+    "api-client",
+    "typescript",
+    "node",
+    "nodejs"
+  ],
+  "author": "Alexander Slaa",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/SourceRegistry/node-firecracker/issues"
+  },
+  "homepage": "https://sourceregistry.github.io/node-firecracker/",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@sourceregistry/semantic-release-jsr": "^1.1.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^13.1.3",
+    "@semantic-release/release-notes-generator": "^14.1.0",
+    "@types/node": "^25.5.2",
+    "@vitest/coverage-v8": "^4.1.2",
+    "@vitest/ui": "^4.0.16",
+    "jsr": "^0.13.0",
+    "tsx": "^4.21.0",
+    "typedoc": "^0.28.18",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.5",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.1.2"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      [
+        "@sourceregistry/semantic-release-jsr",
+        {
+          "pkgRoot": "generated/jsr-publish",
+          "configFile": "jsr.json",
+          "allowSlowTypes": true
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json",
+            "package-lock.json",
+            "jsr.json",
+            "CHANGELOG.md"
+          ],
+          "message": "node-firecracker(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
+  }
+}
