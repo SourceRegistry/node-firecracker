@@ -133,6 +133,76 @@ npm run test:ui     # vitest UI
 npm run test:coverage
 npm run build
 npm run docs:build  # generate TypeDoc
+npm run examples:tty # boot a VM with this terminal attached to ttyS0
+npm run examples:lambda # invoke Lambda-style handlers inside a microVM
+npm run examples:lambda:python # invoke with the Python fixture-based rootfs
+npm run examples:lambda:node # invoke with the Node fixture-based rootfs
+npm run examples:lambda:rootfs:python # build a Python-only rootfs
+npm run examples:lambda:rootfs:node # build a Node-only rootfs
+npm run examples:lambda:rootfs:alpine:python # build a fresh Alpine Python rootfs
+npm run examples:lambda:rootfs:alpine:node # build a fresh Alpine Node rootfs
+```
+
+### Interactive TTY example
+
+To see the isolation boundary directly, run a Firecracker process with its serial console attached to your terminal. The example starts a fresh VM, configures it through `FirecrackerClient`, boots with `console=ttyS0`, and leaves you at a shell inside the guest. Try `uname -a`, `cat /proc/meminfo`, or `mount` to inspect the isolated environment. Press Ctrl+C to stop the VM.
+
+You can also attach a mountable ext4 filesystem as a second drive. Firecracker does not make this a live host-folder mount: if you pass a directory, the example copies it into a temporary ext4 image before boot. Writes made inside the guest stay in that image and are discarded when the example exits unless you pass your own image via `FIRECRACKER_SHARE_IMAGE`.
+
+Inside the devcontainer, the fixture environment variables are already set:
+
+```bash
+npm run examples:tty
+
+# Optional: pack a host directory into /dev/vdb for the guest
+FIRECRACKER_SHARE_DIR=./examples \
+npm run examples:tty
+```
+
+Inside the guest, mount the extra drive with:
+
+```sh
+mkdir -p /dev /mnt/shared; mount -t devtmpfs devtmpfs /dev 2>/dev/null; mount -t ext4 /dev/vdb /mnt/shared; ls -la /mnt/shared
+```
+
+Outside the devcontainer, download fixtures first and pass them through the environment:
+
+```bash
+./scripts/fetch-firecracker-fixtures.sh
+
+FIRECRACKER_BIN=$HOME/.cache/firecracker-fixtures/release-v1.16.0-x86_64/firecracker-v1.16.0-x86_64 \
+FIRECRACKER_KERNEL=$HOME/.cache/firecracker-fixtures/vmlinux \
+FIRECRACKER_ROOTFS=$HOME/.cache/firecracker-fixtures/rootfs.ext4 \
+npm run examples:tty
+```
+
+### Lambda-style examples
+
+`examples/lambda/` contains small Node.js, Python, and container-image style handlers that resemble the application payloads commonly run by serverless platforms on top of microVM isolation. Run them locally, pack the folder into the interactive VM with `FIRECRACKER_SHARE_DIR=./examples/lambda npm run examples:tty`, or invoke them through the microVM runner:
+
+```bash
+npm run examples:lambda
+```
+
+The runner boots a fresh Firecracker VM, attaches `examples/lambda/` as a read-only ext4 drive, mounts it in the guest, and executes `microvm-runtime.sh` over the serial console. The stock fixture rootfs only runs the shell handler; Python, Node.js, and AI examples run in-VM once your guest rootfs includes those runtimes.
+
+To build lean runtime-specific guest rootfs images:
+
+```bash
+# Create container-friendly Alpine rootfs images without loop mounts.
+sudo npm run examples:lambda:rootfs:python
+sudo npm run examples:lambda:rootfs:node
+
+# Or use explicit Alpine output names.
+sudo npm run examples:lambda:rootfs:alpine:python
+sudo npm run examples:lambda:rootfs:alpine:node
+
+FIRECRACKER_ROOTFS=$HOME/.cache/firecracker-fixtures/rootfs-python.ext4 npm run examples:lambda
+FIRECRACKER_ROOTFS=$HOME/.cache/firecracker-fixtures/rootfs-node.ext4 npm run examples:lambda
+
+# Equivalent shortcuts after building:
+npm run examples:lambda:python
+npm run examples:lambda:node
 ```
 
 ### Real VM testing
