@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/SourceRegistry/node-firecracker/compare/v1.4.0...v1.5.0) (2026-09-03)
+
+
+### Features
+
+* add missing Firecracker API endpoints and types ([6a3b099](https://github.com/SourceRegistry/node-firecracker/commit/6a3b099e369771b9c97f5794ad79ab233dd6af6f))
+
 # [1.4.0](https://github.com/SourceRegistry/node-firecracker/compare/v1.3.2...v1.4.0) (2026-06-19)
 
 
