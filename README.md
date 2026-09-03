@@ -77,9 +77,17 @@ Firecracker's `GET`/`PUT`/`PATCH`). All request/response bodies are typed agains
 | `balloon.update(partial)` | `PATCH /balloon` |
 | `balloon.stats.get()` | `GET /balloon/statistics` |
 | `balloon.stats.update(partial)` | `PATCH /balloon/statistics` |
+| `balloon.hinting.start(cmd?)` | `PATCH /balloon/hinting/start` |
+| `balloon.hinting.status()` | `GET /balloon/hinting/status` |
+| `balloon.hinting.stop()` | `PATCH /balloon/hinting/stop` |
 | `bootSource.set(config)` | `PUT /boot-source` |
+| `cpuConfig.set(config)` | `PUT /cpu-config` |
 | `drive(id).set(drive)` | `PUT /drives/{drive_id}` |
 | `drive(id).update(partial)` | `PATCH /drives/{drive_id}` |
+| `entropy.set(config)` | `PUT /entropy` |
+| `hotplugMemory.get()` | `GET /hotplug/memory` |
+| `hotplugMemory.set(config)` | `PUT /hotplug/memory` |
+| `hotplugMemory.update(update)` | `PATCH /hotplug/memory` |
 | `logger.set(config)` | `PUT /logger` |
 | `machineConfig.get()` | `GET /machine-config` |
 | `machineConfig.set(config)` | `PUT /machine-config` |
@@ -91,6 +99,9 @@ Firecracker's `GET`/`PUT`/`PATCH`). All request/response bodies are typed agains
 | `mmds.config.set(config)` | `PUT /mmds/config` |
 | `networkInterface(id).set(iface)` | `PUT /network-interfaces/{iface_id}` |
 | `networkInterface(id).update(partial)` | `PATCH /network-interfaces/{iface_id}` |
+| `pmem(id).set(pmem)` | `PUT /pmem/{id}` |
+| `pmem(id).update(partial)` | `PATCH /pmem/{id}` |
+| `serial.set(config)` | `PUT /serial` |
 | `snapshot.create(params)` | `PUT /snapshot/create` |
 | `snapshot.load(params)` | `PUT /snapshot/load` |
 | `vm.update(state)` | `PATCH /vm` |

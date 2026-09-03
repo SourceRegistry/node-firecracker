@@ -174,4 +174,55 @@ describe("FirecrackerClient", () => {
     await client.vmConfig.get();
     expect(lastRequest).toMatchObject({ method: "GET", url: "/vm/config" });
   });
+
+  it("pmem(id).set/update hit /pmem/{id}", async () => {
+    await client.pmem("pmem0").set({ id: "pmem0", path_on_host: "/pmem0.img" });
+    expect(lastRequest).toMatchObject({ method: "PUT", url: "/pmem/pmem0" });
+
+    await client.pmem("pmem0").update({ id: "pmem0" });
+    expect(lastRequest).toMatchObject({ method: "PATCH", url: "/pmem/pmem0" });
+  });
+
+  it("cpuConfig.set hits PUT /cpu-config", async () => {
+    await client.cpuConfig.set({ kvm_capabilities: ["121"] });
+    expect(lastRequest).toMatchObject({ method: "PUT", url: "/cpu-config" });
+  });
+
+  it("entropy.set hits PUT /entropy", async () => {
+    await client.entropy.set({});
+    expect(lastRequest).toMatchObject({ method: "PUT", url: "/entropy" });
+  });
+
+  it("serial.set hits PUT /serial", async () => {
+    await client.serial.set({ serial_out_path: "/tmp/serial.log" });
+    expect(lastRequest).toMatchObject({ method: "PUT", url: "/serial" });
+  });
+
+  it("hotplugMemory.set/update/get hit /hotplug/memory", async () => {
+    await client.hotplugMemory.set({ total_size_mib: 1024 });
+    expect(lastRequest).toMatchObject({ method: "PUT", url: "/hotplug/memory" });
+
+    await client.hotplugMemory.update({ requested_size_mib: 512 });
+    expect(lastRequest).toMatchObject({ method: "PATCH", url: "/hotplug/memory" });
+
+    nextResponse = {
+      status: 200,
+      body: { total_size_mib: 1024, slot_size_mib: 128, block_size_mib: 2, plugged_size_mib: 512, requested_size_mib: 512 },
+    };
+    await client.hotplugMemory.get();
+    expect(lastRequest).toMatchObject({ method: "GET", url: "/hotplug/memory" });
+  });
+
+  it("balloon.hinting.start/status/stop hit the right routes", async () => {
+    await client.balloon.hinting.start({ acknowledge_on_stop: true });
+    expect(lastRequest).toMatchObject({ method: "PATCH", url: "/balloon/hinting/start" });
+
+    nextResponse = { status: 200, body: { host_cmd: 1, guest_cmd: 1 } };
+    await client.balloon.hinting.status();
+    expect(lastRequest).toMatchObject({ method: "GET", url: "/balloon/hinting/status" });
+
+    nextResponse = { status: 204 };
+    await client.balloon.hinting.stop();
+    expect(lastRequest).toMatchObject({ method: "PATCH", url: "/balloon/hinting/stop" });
+  });
 });

@@ -3,11 +3,15 @@ import { FirecrackerApiError } from "./error.js";
 import type {
   ActionType,
   Balloon,
+  BalloonHintingStatus,
+  BalloonStartCmd,
   BalloonStats,
   BalloonStatsUpdate,
   BalloonUpdate,
   BootSource,
+  CpuConfig,
   Drive,
+  EntropyDevice,
   FirecrackerErrorBody,
   FirecrackerVersion,
   FullVmConfiguration,
@@ -15,11 +19,17 @@ import type {
   InstanceInfo,
   Logger,
   MachineConfiguration,
+  MemoryHotplugConfig,
+  MemoryHotplugSizeUpdate,
+  MemoryHotplugStatus,
   Metrics,
   MmdsConfig,
   NetworkInterface,
   PartialDrive,
   PartialNetworkInterface,
+  PartialPmem,
+  Pmem,
+  SerialDevice,
   SnapshotCreateParams,
   SnapshotLoadParams,
   Vm,
@@ -48,11 +58,32 @@ export class BalloonStatsResource {
   }
 }
 
+export class BalloonHintingResource {
+  constructor(private readonly request: Requester) {}
+
+  /** PATCH /balloon/hinting/start */
+  start(cmd?: BalloonStartCmd): Promise<void> {
+    return this.request("PATCH", "/balloon/hinting/start", cmd);
+  }
+
+  /** GET /balloon/hinting/status */
+  status(): Promise<BalloonHintingStatus> {
+    return this.request("GET", "/balloon/hinting/status");
+  }
+
+  /** PATCH /balloon/hinting/stop */
+  stop(): Promise<void> {
+    return this.request("PATCH", "/balloon/hinting/stop");
+  }
+}
+
 export class BalloonResource {
   readonly stats: BalloonStatsResource;
+  readonly hinting: BalloonHintingResource;
 
   constructor(private readonly request: Requester) {
     this.stats = new BalloonStatsResource(request);
+    this.hinting = new BalloonHintingResource(request);
   }
 
   get(): Promise<Balloon> {
@@ -91,11 +122,74 @@ export class DriveResource {
   }
 }
 
+export class CpuConfigResource {
+  constructor(private readonly request: Requester) {}
+
+  /** PUT /cpu-config. Pre-boot only. */
+  set(config: CpuConfig): Promise<void> {
+    return this.request("PUT", "/cpu-config", config);
+  }
+}
+
+export class EntropyResource {
+  constructor(private readonly request: Requester) {}
+
+  /** PUT /entropy. Pre-boot only. */
+  set(device: EntropyDevice): Promise<void> {
+    return this.request("PUT", "/entropy", device);
+  }
+}
+
+export class SerialResource {
+  constructor(private readonly request: Requester) {}
+
+  /** PUT /serial */
+  set(device: SerialDevice): Promise<void> {
+    return this.request("PUT", "/serial", device);
+  }
+}
+
+export class HotplugMemoryResource {
+  constructor(private readonly request: Requester) {}
+
+  /** GET /hotplug/memory */
+  get(): Promise<MemoryHotplugStatus> {
+    return this.request("GET", "/hotplug/memory");
+  }
+
+  /** PUT /hotplug/memory. Pre-boot only. */
+  set(config: MemoryHotplugConfig): Promise<void> {
+    return this.request("PUT", "/hotplug/memory", config);
+  }
+
+  /** PATCH /hotplug/memory */
+  update(update: MemoryHotplugSizeUpdate): Promise<void> {
+    return this.request("PATCH", "/hotplug/memory", update);
+  }
+}
+
 export class LoggerResource {
   constructor(private readonly request: Requester) {}
 
   set(logger: Logger): Promise<void> {
     return this.request("PUT", "/logger", logger);
+  }
+}
+
+export class PmemResource {
+  constructor(
+    private readonly request: Requester,
+    private readonly id: string,
+  ) {}
+
+  /** PUT /pmem/{id}. Pre-boot only. */
+  set(pmem: Pmem): Promise<void> {
+    return this.request("PUT", `/pmem/${encodeURIComponent(this.id)}`, pmem);
+  }
+
+  /** PATCH /pmem/{id}. Post-boot only. */
+  update(pmem: PartialPmem): Promise<void> {
+    return this.request("PATCH", `/pmem/${encodeURIComponent(this.id)}`, pmem);
   }
 }
 
@@ -212,10 +306,14 @@ export class FirecrackerClient {
 
   readonly balloon: BalloonResource;
   readonly bootSource: BootSourceResource;
+  readonly cpuConfig: CpuConfigResource;
+  readonly entropy: EntropyResource;
+  readonly hotplugMemory: HotplugMemoryResource;
   readonly logger: LoggerResource;
   readonly machineConfig: MachineConfigResource;
   readonly metrics: MetricsResource;
   readonly mmds: MmdsResource;
+  readonly serial: SerialResource;
   readonly snapshot: SnapshotResource;
   readonly vm: VmResource;
   readonly vmConfig: VmConfigResource;
@@ -228,10 +326,14 @@ export class FirecrackerClient {
     const request = this.request.bind(this);
     this.balloon = new BalloonResource(request);
     this.bootSource = new BootSourceResource(request);
+    this.cpuConfig = new CpuConfigResource(request);
+    this.entropy = new EntropyResource(request);
+    this.hotplugMemory = new HotplugMemoryResource(request);
     this.logger = new LoggerResource(request);
     this.machineConfig = new MachineConfigResource(request);
     this.metrics = new MetricsResource(request);
     this.mmds = new MmdsResource(request);
+    this.serial = new SerialResource(request);
     this.snapshot = new SnapshotResource(request);
     this.vm = new VmResource(request);
     this.vmConfig = new VmConfigResource(request);
@@ -246,6 +348,11 @@ export class FirecrackerClient {
   /** Resource handle for `/network-interfaces/{iface_id}`. */
   networkInterface(ifaceId: string): NetworkInterfaceResource {
     return new NetworkInterfaceResource(this.request.bind(this), ifaceId);
+  }
+
+  /** Resource handle for `/pmem/{id}`. */
+  pmem(id: string): PmemResource {
+    return new PmemResource(this.request.bind(this), id);
   }
 
   /** GET / */
